@@ -35,6 +35,10 @@
 #include "qgtk2dialoghelpers.h"
 #include <QVariant>
 
+#if !defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
+#include <private/qdbustrayicon_p.h>
+#endif
+
 #undef signals
 #include <gtk/gtk.h>
 
@@ -43,6 +47,13 @@
 QT_BEGIN_NAMESPACE
 
 const char *QGtk2Theme::name = "gtk2";
+
+#if !defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
+QPlatformSystemTrayIcon *QGtk2Theme::createPlatformSystemTrayIcon() const
+{
+    return new QDBusTrayIcon();
+}
+#endif
 
 static QString gtkSetting(const gchar *propertyName)
 {
